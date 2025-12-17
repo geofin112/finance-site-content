@@ -4,31 +4,31 @@ export default async function Home() {
   let data = null;
   let error = null;
 
-try {
-  const response = await supabase
-    .from('prices')
-    .select('*')
-    .eq('symbol', 'BTC')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
+  try {
+    const response = await supabase
+      .from('prices')
+      .select('*')
+      .eq('symbol', 'BTC')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
 
-  data = response.data;
-  error = response.error;
-} catch (err) {
-  error = err;
-}
+    data = response.data;
+    error = response.error;
+  } catch (err) {
+    error = err;
+  }
 
   if (error || !data) {
     return (
-      <main style={{ padding: '3rem', fontFamily: 'sans-serif' }}>
+      <main style={{ padding: '3rem', fontFamily: 'system-ui, sans-serif' }}>
         <h1>Live Bitcoin (BTC) Price</h1>
-        <p>Price unavailable</p>
+        <p>Market data temporarily unavailable.</p>
       </main>
     );
   }
 
-    return (
+  return (
     <main
       style={{
         maxWidth: '720px',
@@ -60,42 +60,14 @@ try {
         </h2>
 
         <div style={{ fontSize: '2.5rem', fontWeight: 600, marginBottom: '1rem' }}>
-          <section
-  style={{
-    border: '1px solid #e5e5e5',
-    borderRadius: '12px',
-    padding: '2rem',
-    boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
-  }}
->
-  <h2 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>
-    Bitcoin (BTC)
-  </h2>
-
-  {!data || error ? (
-    <div style={{ color: '#b00020', fontSize: '1rem' }}>
-      Market data temporarily unavailable.
-    </div>
-  ) : (
-    <>
-      <div style={{ fontSize: '2.5rem', fontWeight: 600, marginBottom: '1rem' }}>
-        ${data.price.toLocaleString()}
-      </div>
-
-      <div style={{ fontSize: '0.9rem', color: '#666' }}>
-        <div>Source: {data.source}</div>
-        <div>
-          Last updated: {new Date(data.created_at).toLocaleString()}
-        </div>
-      </div>
-    </>
-  )}
-</section>
+          ${data.price.toLocaleString()}
         </div>
 
         <div style={{ fontSize: '0.9rem', color: '#666' }}>
           <div>Source: {data.source}</div>
-          <div>Last updated: {new Date(data.created_at).toLocaleString()}</div>
+          <div>
+            Last updated: {new Date(data.created_at).toLocaleString()}
+          </div>
         </div>
       </section>
 
