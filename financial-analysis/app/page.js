@@ -22,11 +22,27 @@ async function getLatestStocks() {
   return data;
 }
 
+async function getLatestWTI() {
+  const { data, error } = await supabase
+    .from('commodities')
+    .select('*')
+    .eq('name', 'Crude Oil (WTI)')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 export default async function Home() {
   let crypto = null;
   let stocks = [];
+  let wti = null;
+
   let cryptoError = null;
   let stockError = null;
+  let wtiError = null;
 
   try {
     crypto = await getLatestCrypto();
@@ -38,6 +54,12 @@ export default async function Home() {
     stocks = await getLatestStocks();
   } catch (err) {
     stockError = err.message;
+  }
+
+  try {
+    wti = await getLatestWTI();
+  } catch (err) {
+    wtiError = err.message;
   }
 
   return (
@@ -54,7 +76,7 @@ export default async function Home() {
           Financial Dashboard
         </h1>
         <p style={{ color: '#555' }}>
-          Live crypto & stock prices from independent market data providers
+          Live crypto, stocks & commodities from independent market data providers
         </p>
       </header>
 
@@ -88,6 +110,7 @@ export default async function Home() {
           borderRadius: '12px',
           padding: '2rem',
           boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
+          marginBottom: '2rem',
         }}
       >
         <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>Stocks</h2>
@@ -104,6 +127,29 @@ export default async function Home() {
               </li>
             ))}
           </ul>
+        )}
+      </section>
+
+      {/* Commodities Section */}
+      <section
+        style={{
+          border: '1px solid #e5e5e5',
+          borderRadius: '12px',
+          padding: '2rem',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
+          marginBottom: '2rem',
+        }}
+      >
+        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>Commodities</h2>
+        {wtiError || !wti ? (
+          <p style={{ color: '#b00020' }}>Commodity data unavailable</p>
+        ) : (
+          <div style={{ fontSize: '2rem', fontWeight: 600 }}>
+            {wti.name}: ${wti.price} / {wti.unit}
+            <span style={{ fontSize: '0.9rem', color: '#666', display: 'block' }}>
+              Source: {wti.source} | Last updated: {new Date(wti.created_at).toLocaleString()}
+            </span>
+          </div>
         )}
       </section>
 
