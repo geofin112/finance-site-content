@@ -35,14 +35,27 @@ async function getLatestWTI() {
   return data;
 }
 
+async function getLatestMetals() {
+  const { data, error } = await supabase
+    .from('metals')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 export default async function Home() {
   let crypto = null;
   let stocks = [];
   let wti = null;
+  let metals = [];
+
 
   let cryptoError = null;
   let stockError = null;
   let wtiError = null;
+  let metalError = null;
 
   try {
     crypto = await getLatestCrypto();
@@ -60,6 +73,12 @@ export default async function Home() {
     wti = await getLatestWTI();
   } catch (err) {
     wtiError = err.message;
+  }
+
+  try {
+    metals = await getLatestMetals();
+  } catch (err) {
+  metalError = err.message;
   }
 
   return (
@@ -150,6 +169,37 @@ export default async function Home() {
               Source: {wti.source} | Last updated: {new Date(wti.created_at).toLocaleString()}
             </span>
           </div>
+        )}
+      </section>
+      {/* Metals Section */}
+      <section
+        style={{
+          border: '1px solid #e5e5e5',
+          borderRadius: '12px',
+          padding: '2rem',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
+          marginTop: '2rem',
+        }}
+      >
+        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>
+          Precious Metals
+        </h2>
+
+        {metalError || metals.length === 0 ? (
+          <p style={{ color: '#b00020' }}>Metal data unavailable</p>
+        ) : (
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {metals.map((metal) => (
+              <li key={metal.id} style={{ marginBottom: '1rem' }}>
+                <strong>{metal.name}:</strong>{' '}
+                ${metal.price.toLocaleString()} {metal.unit}
+                <div style={{ fontSize: '0.85rem', color: '#666' }}>
+                  Source: {metal.source} | Updated:{' '}
+                  {new Date(metal.created_at).toLocaleString()}
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
       </section>
 

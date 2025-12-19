@@ -1,34 +1,43 @@
-import fetch from 'node-fetch';
+const API_KEY = process.env.NASDAQ_API_KEY;
 
-const API_KEY = process.env.NASDAQ_API_KEY; // hdR_SP5xgW7yg_yys84y
-const METALS = {
-  GOLD: 'LBMA/GOLD',
-  SILVER: 'LBMA/SILVER'
+const METAL_MAP = {
+  GOLD: {
+    dataset: 'LBMA/GOLD',
+    column: 1,
+    name: 'Gold',
+    unit: 'USD/oz'
+  },
+  SILVER: {
+    dataset: 'LBMA/SILVER',
+    column: 1,
+    name: 'Silver',
+    unit: 'USD/oz'
+  }
 };
 
 export async function fetchMetal(symbol) {
-  if (!API_KEY) throw new Error('Nasdaq API key missing');
+  if (!API_KEY) throw new Error('NASDAQ API key missing');
 
-  const dataset = METALS[symbol];
-  if (!dataset) throw new Error(`Unsupported metal: ${symbol}`);
+  const meta = METAL_MAP[symbol];
+  if (!meta) throw new Error(`Unsupported metal: ${symbol}`);
 
-  const url = `https://data.nasdaq.com/api/v3/datasets/${dataset}/data.json?api_key=${API_KEY}&rows=1`;
+  const url = `https://data.nasdaq.com/api/v3/datasets/${meta.dataset}/data.json?rows=1&api_key=${API_KEY}`;
 
   const res = await fetch(url);
   const json = await res.json();
 
-  if (!json || !json.dataset_data || !json.dataset_data.data || !json.dataset_data.data[0]) {
-    console.error('RAW RESPONSE:', json);
-    throw new Error(`Invalid metal response for ${symbol}`);
+  if (!json?.dataset_data?.data?.length) {
+    throw new Error(`Invalid response for ${symbol}`);
   }
 
-  const latest = json.dataset_data.data[0]; // usually [date, price, ...]
-  const price = latest[1];
+  const latest = json.dataset_data.data[0];
+  const price = Number(latest[meta.column]);
 
   return {
-    name: symbol,
-    price: Number(price),
-    unit: 'USD/oz',
-    source: 'nasdaq-datalink'
+    name: meta.name,
+    symbol,
+    price,
+    unit: meta.unit,
+    source: 'nasdaq'
   };
 }
