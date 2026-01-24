@@ -1,211 +1,44 @@
-import { supabase } from '@/lib/supabaseClient';
+"use client";
 
-async function getLatestCrypto() {
-  const { data, error } = await supabase
-    .from('prices')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
+import { useEffect, useState } from "react";
 
-  if (error) throw new Error(error.message);
-  return data;
-}
+export default function Home() {
+  const [prices, setPrices] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-async function getLatestStocks() {
-  const { data, error } = await supabase
-    .from('stocks')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) throw new Error(error.message);
-  return data;
-}
-
-async function getLatestWTI() {
-  const { data, error } = await supabase
-    .from('commodities')
-    .select('*')
-    .eq('name', 'Crude Oil (WTI)')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single();
-
-  if (error) throw new Error(error.message);
-  return data;
-}
-
-async function getLatestMetals() {
-  const { data, error } = await supabase
-    .from('metals')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) throw new Error(error.message);
-  return data;
-}
-
-export default async function Home() {
-  let crypto = null;
-  let stocks = [];
-  let wti = null;
-  let metals = [];
-
-
-  let cryptoError = null;
-  let stockError = null;
-  let wtiError = null;
-  let metalError = null;
-
-  try {
-    crypto = await getLatestCrypto();
-  } catch (err) {
-    cryptoError = err.message;
+  async function fetchPrices() {
+    try {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,pax-gold&vs_currencies=usd"
+      );
+      const data = await res.json();
+      setPrices(data);
+      setLoading(false);
+    } catch (err) {
+      console.error("CoinGecko error:", err);
+    }
   }
 
-  try {
-    stocks = await getLatestStocks();
-  } catch (err) {
-    stockError = err.message;
-  }
-
-  try {
-    wti = await getLatestWTI();
-  } catch (err) {
-    wtiError = err.message;
-  }
-
-  try {
-    metals = await getLatestMetals();
-  } catch (err) {
-  metalError = err.message;
-  }
+  useEffect(() => {
+    fetchPrices();
+    const interval = setInterval(fetchPrices, 15000); // update every 15s
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <main
-      style={{
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '4rem 2rem',
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-      }}
-    >
-      <header style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2.2rem', marginBottom: '0.5rem' }}>
-          Financial Dashboard
-        </h1>
-        <p style={{ color: '#555' }}>
-          Live crypto, stocks & commodities from independent market data providers
-        </p>
-      </header>
+    <main style={{ padding: "40px", fontFamily: "Arial" }}>
+      <h1>Financial Analysis Dashboard</h1>
+      <p>Live market prices (powered by CoinGecko)</p>
 
-      {/* Crypto Section */}
-      <section
-        style={{
-          border: '1px solid #e5e5e5',
-          borderRadius: '12px',
-          padding: '2rem',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
-          marginBottom: '2rem',
-        }}
-      >
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>Cryptocurrency</h2>
-        {cryptoError || !crypto ? (
-          <p style={{ color: '#b00020' }}>Crypto data unavailable</p>
-        ) : (
-          <div style={{ fontSize: '2rem', fontWeight: 600 }}>
-            Bitcoin (BTC): ${crypto.price.toLocaleString()}  
-            <span style={{ fontSize: '0.9rem', color: '#666', display: 'block' }}>
-              Source: {crypto.source} | Last updated: {new Date(crypto.created_at).toLocaleString()}
-            </span>
-          </div>
-        )}
-      </section>
+      {loading && <p>Loading prices...</p>}
 
-      {/* Stocks Section */}
-      <section
-        style={{
-          border: '1px solid #e5e5e5',
-          borderRadius: '12px',
-          padding: '2rem',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
-          marginBottom: '2rem',
-        }}
-      >
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>Stocks</h2>
-        {stockError || stocks.length === 0 ? (
-          <p style={{ color: '#b00020' }}>Stock data unavailable</p>
-        ) : (
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {stocks.map((stock) => (
-              <li key={stock.id} style={{ marginBottom: '1rem' }}>
-                <strong>{stock.symbol}:</strong> ${stock.price.toLocaleString()}{' '}
-                <span style={{ fontSize: '0.85rem', color: '#666' }}>
-                  Source: {stock.source} | Last updated: {new Date(stock.created_at).toLocaleString()}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* Commodities Section */}
-      <section
-        style={{
-          border: '1px solid #e5e5e5',
-          borderRadius: '12px',
-          padding: '2rem',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
-          marginBottom: '2rem',
-        }}
-      >
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>Commodities</h2>
-        {wtiError || !wti ? (
-          <p style={{ color: '#b00020' }}>Commodity data unavailable</p>
-        ) : (
-          <div style={{ fontSize: '2rem', fontWeight: 600 }}>
-            {wti.name}: ${wti.price} / {wti.unit}
-            <span style={{ fontSize: '0.9rem', color: '#666', display: 'block' }}>
-              Source: {wti.source} | Last updated: {new Date(wti.created_at).toLocaleString()}
-            </span>
-          </div>
-        )}
-      </section>
-      {/* Metals Section */}
-      <section
-        style={{
-          border: '1px solid #e5e5e5',
-          borderRadius: '12px',
-          padding: '2rem',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
-          marginTop: '2rem',
-        }}
-      >
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>
-          Precious Metals
-        </h2>
-
-        {metalError || metals.length === 0 ? (
-          <p style={{ color: '#b00020' }}>Metal data unavailable</p>
-        ) : (
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {metals.map((metal) => (
-              <li key={metal.id} style={{ marginBottom: '1rem' }}>
-                <strong>{metal.name}:</strong>{' '}
-                ${metal.price.toLocaleString()} {metal.unit}
-                <div style={{ fontSize: '0.85rem', color: '#666' }}>
-                  Source: {metal.source} | Updated:{' '}
-                  {new Date(metal.created_at).toLocaleString()}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <footer style={{ marginTop: '3rem', fontSize: '0.8rem', color: '#777' }}>
-        Data provided for informational purposes only. No financial advice.
-      </footer>
+      {prices && (
+        <ul style={{ fontSize: "18px" }}>
+          <li>Bitcoin (BTC): ${prices.bitcoin.usd}</li>
+          <li>Ethereum (ETH): ${prices.ethereum.usd}</li>
+          <li>Gold (PAXG): ${prices["pax-gold"].usd}</li>
+        </ul>
+      )}
     </main>
   );
 }
