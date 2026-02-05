@@ -31,6 +31,11 @@ export default function Home() {
       <p>Live market prices (powered by CoinGecko)</p>
 
       {loading && <p>Loading prices...</p>}
+<section style={{ marginTop: '2rem' }}>
+  <a href="/blog" style={{ color: '#0070f3', fontWeight: 'bold' }}>
+    Visit the Blog &rarr;
+  </a>
+</section>
 <a href="/blog" style={{ display: "block", marginBottom: "2rem" }}>
   📈 Read My Trading Journal
 </a>

@@ -1,17 +1,15 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import fs from 'fs';
+import path from 'path';
+import { marked } from 'marked';
 
 export default function PostPage({ params }) {
-  const filePath = path.join(process.cwd(), "content/posts", `${params.slug}.md`);
-  const fileContent = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(fileContent);
+  const { slug } = params;
+  const filePath = path.join(process.cwd(), 'app', 'blog', 'posts', `${slug}.md`);
+  const content = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : 'Post not found';
 
   return (
-    <main style={{ padding: "3rem" }}>
-      <h1>{data.title}</h1>
-      <p>{data.date}</p>
-      <div style={{ marginTop: "2rem", lineHeight: "1.6" }}>{content}</div>
+    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
+      <article dangerouslySetInnerHTML={{ __html: marked(content) }} />
     </main>
   );
 }
