@@ -31,7 +31,9 @@ export default function Home() {
       <p>Live market prices (powered by CoinGecko)</p>
 
       {loading && <p>Loading prices...</p>}
-
+<a href="/blog" style={{ display: "block", marginBottom: "2rem" }}>
+  📈 Read My Trading Journal
+</a>
       {prices && (
         <ul style={{ fontSize: "18px" }}>
           <li>Bitcoin (BTC): ${prices.bitcoin.usd}</li>
