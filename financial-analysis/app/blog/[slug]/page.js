@@ -1,15 +1,22 @@
-import fs from 'fs';
-import path from 'path';
-import { marked } from 'marked';
+"use client";
+
+import { useEffect, useState } from "react";
+import { marked } from "marked";
 
 export default function PostPage({ params }) {
   const { slug } = params;
-  const filePath = path.join(process.cwd(), 'app', 'blog', 'posts', `${slug}.md`);
-  const content = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : 'Post not found';
+  const [content, setContent] = useState("Loading...");
+
+  useEffect(() => {
+    fetch(`/blog/posts/${slug}.md`)
+      .then(res => res.text())
+      .then(md => setContent(marked(md)))
+      .catch(() => setContent("Post not found"));
+  }, [slug]);
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-      <article dangerouslySetInnerHTML={{ __html: marked(content) }} />
+    <main style={{ maxWidth: "900px", margin: "0 auto", padding: "2rem" }}>
+      <article dangerouslySetInnerHTML={{ __html: content }} />
     </main>
   );
 }
