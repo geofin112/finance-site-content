@@ -18,10 +18,38 @@ export default function PostPage() {
   }, [slug]);
 
   return (
-    <main style={{ padding: "40px", fontFamily: "Arial", maxWidth: "800px", margin: "auto" }}>
-      <pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>
+  <main
+    style={{
+      maxWidth: "800px",
+      margin: "60px auto",
+      padding: "0 20px",
+      lineHeight: "1.7",
+      fontSize: "18px"
+    }}
+  >
+    <article>
+      <pre
+        style={{
+          whiteSpace: "pre-wrap",
+          fontFamily: "Georgia, serif"
+        }}
+      >
         {content}
       </pre>
-    </main>
-  );
+    </article>
+
+    <hr style={{ margin: "40px 0" }} />
+
+    <a
+      href="/blog"
+      style={{
+        textDecoration: "none",
+        color: "#0070f3",
+        fontWeight: "bold"
+      }}
+    >
+      ← Back to Trading Journal
+    </a>
+  </main>
+);
 }

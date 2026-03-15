@@ -16,19 +16,39 @@ export default async function BlogPage() {
   }
 
   return (
-    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
-      <h1>Blog</h1>
-      {posts.length === 0 ? (
-        <p>No posts yet</p>
-      ) : (
-        <ul>
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
-  );
+  <main
+    style={{
+      maxWidth: "900px",
+      margin: "50px auto",
+      padding: "0 20px"
+    }}
+  >
+    <h1>Trading Journal</h1>
+    <p style={{ color: "#555" }}>
+      Daily market insights on Bitcoin, Ethereum and Gold.
+    </p>
+
+    <ul style={{ listStyle: "none", padding: 0 }}>
+      {posts.map(post => (
+        <li key={post.slug} style={{ marginBottom: "25px" }}>
+          <a
+            href={`/blog/${post.slug}`}
+            style={{
+              fontSize: "22px",
+              fontWeight: "bold",
+              color: "#0070f3",
+              textDecoration: "none"
+            }}
+          >
+            {post.title}
+          </a>
+
+          <div style={{ color: "#777", fontSize: "14px" }}>
+            {post.date}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </main>
+);
 }
