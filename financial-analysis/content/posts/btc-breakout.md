@@ -23,7 +23,7 @@ Let me break it down, timeframe by timeframe.
 ## The Monthly Chart: The Big Picture Doesn't Lie
 
 Zoom out. All the way.
-
+![alt text](image.png)
 On the monthly chart, Bitcoin peaked somewhere above $108,000, formed a stunning top, and has since been rolling over in what is textbook bearish momentum. The next monthly support that matters — the level that has been acting as a gravitational pull — is right around **$50,000**.
 
 This isn't just some arbitrary number. The $50K zone is a _confluence of confluences_:
@@ -36,8 +36,6 @@ When multiple technical structures align at one price, it's no longer just suppo
 
 The question isn't _if_ Bitcoin tests $50K. The question is — _what needs to break first?_
 
----
-
 ## The Weekly Chart: The Break Has Already Happened
 
 Here's what most people missed while they were watching the daily noise.
@@ -48,7 +46,7 @@ The weekly structure is now oriented downward. The previous support flipped to r
 
 This matters because the **weekly timeframe is where institutional hands move**. Retail traders fight over 15-minute candles. The smart money is playing the weekly. And the weekly is telling us: the next destination is $50K — pending one more domino falling.
 
----
+![alt text](image-1.png)
 
 ## The Daily Chart: The Last Domino Is at $62,600
 
@@ -70,7 +68,7 @@ History doesn't repeat. But on a chart? It rhymes with stunning regularity.
 
 Currently, we're watching price attempt to hold an internal daily level while simultaneously retesting the _previous support that has now flipped to resistance_ — a structure that traders who understand smart money concepts will recognize instantly. The market is giving multiple signals, all pointing in the same direction.
 
----
+![alt text](image-2.png)
 
 ## The Geopolitical Backdrop: When the Hype Machine Stalls
 
