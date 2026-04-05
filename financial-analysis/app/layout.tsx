@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 
 
 export const metadata = {
-    title: "Financial Analysis",
-    description: "Automated financial analytics site",
-  };
+  title: "Financial Analysis Dashboard",
+  description: "Crypto, Gold and Trading Insights",
+};
   
   
 
