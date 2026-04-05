@@ -1,6 +1,10 @@
-# Bitcoin Breakout Analysis
+---
+title: Bitcoin Breakout Analysis
+date: 2026-04-04
+category: Crypto
+---
 
-Date: 2026-04-04
+Bitcoin is breaking key Support...# Bitcoin Breakout Analysis
 
 # The $50K Gravity Pull: Why Bitcoin's Next Stop Might Be Lower Than You Think
 

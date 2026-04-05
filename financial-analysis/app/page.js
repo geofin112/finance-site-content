@@ -1,22 +1,34 @@
 import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
 
 export default async function Home() {
-  // ✅ Fetch prices (server-side)
+  // ✅ Fetch prices (server-side with ISR)
   const res = await fetch(
     "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,pax-gold&vs_currencies=usd",
-    { next: { revalidate: 15 } } // auto refresh
+    { next: { revalidate: 15 } }
   );
   const prices = await res.json();
 
-  // ✅ Read markdown posts
+  // ✅ Read markdown posts properly
   const dirPath = path.join(process.cwd(), "content", "posts");
   const files = fs.readdirSync(dirPath);
 
-  const posts = files.slice(0, 3).map(file => ({
-    slug: file.replace(".md", ""),
-    title: file.replace(".md", "").replace(/-/g, " "),
-  }));
+  const posts = files
+    .map(file => {
+      const filePath = path.join(dirPath, file);
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+
+      const { data } = matter(fileContent);
+
+      return {
+        slug: file.replace(".md", ""),
+        title: data.title || file.replace(".md", "").replace(/-/g, " "),
+        date: data.date || "2000-01-01", // fallback safety
+      };
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date)) // ✅ latest first
+    .slice(0, 5); // ✅ top 5 only
 
   return (
     <main style={{ padding: "40px", maxWidth: "900px", margin: "auto" }}>
@@ -38,7 +50,7 @@ export default async function Home() {
         {posts.map(post => (
           <li key={post.slug}>
             <a href={`/blog/${post.slug}`}>
-              {post.title}
+              {post.title} ({post.date})
             </a>
           </li>
         ))}
