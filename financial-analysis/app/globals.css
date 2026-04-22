@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --gold: #C9A84C;
+  --gold-dim: #8A6E2F;
+  --gold-light: #E8C97A;
+  --bg-base: #0A0A0B;
+  --bg-1: #111113;
+  --bg-2: #18181C;
+  --bg-3: #1E1E24;
+  --bg-4: #242430;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --border-gold: rgba(201,168,76,0.3);
+  --text-1: #F0EFE8;
+  --text-2: #9A9A8E;
+  --text-3: #5C5C54;
+  --green: #2ECC71;
+  --red: #E74C3C;
+  --blue: #3B82F6;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Syne', sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-1);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+/* Utility */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tag-gold { background: rgba(201,168,76,0.12); color: var(--gold); border: 0.5px solid rgba(201,168,76,0.3); }
+.tag-green { background: rgba(46,204,113,0.1); color: var(--green); border: 0.5px solid rgba(46,204,113,0.25); }
+.tag-red { background: rgba(231,76,60,0.1); color: var(--red); border: 0.5px solid rgba(231,76,60,0.25); }
+.tag-gray { background: var(--bg-3); color: var(--text-2); border: 0.5px solid var(--border-2); }
+
+.divider { height: 0.5px; background: var(--border); margin: 1.5rem 0; }
+
+/* Prose for blog/journal content */
+.prose h1 { font-family: var(--font-display); font-size: 3rem; letter-spacing: 0.02em; color: var(--text-1); margin-bottom: 1rem; line-height: 1.1; }
+.prose h2 { font-family: var(--font-body); font-size: 1.4rem; font-weight: 700; margin: 2rem 0 0.75rem; color: var(--text-1); }
+.prose h3 { font-family: var(--font-body); font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; color: var(--gold); }
+.prose p { color: var(--text-2); margin-bottom: 1rem; line-height: 1.8; font-size: 15px; }
+.prose ul, .prose ol { color: var(--text-2); margin: 1rem 0 1rem 1.5rem; font-size: 15px; }
+.prose li { margin-bottom: 0.4rem; }
+.prose strong { color: var(--text-1); font-weight: 600; }
+.prose em { font-style: italic; color: var(--gold-light); }
+.prose blockquote { border-left: 3px solid var(--gold); padding-left: 1rem; margin: 1.5rem 0; color: var(--text-2); font-family: var(--font-serif); font-style: italic; font-size: 1.1rem; }
+.prose code { background: var(--bg-3); color: var(--gold); padding: 2px 6px; border-radius: 3px; font-family: var(--font-mono); font-size: 13px; }
+.prose pre { background: var(--bg-2); border: 0.5px solid var(--border-2); border-radius: 8px; padding: 1rem; overflow-x: auto; margin: 1.5rem 0; }
+.prose pre code { background: none; padding: 0; color: var(--text-2); font-size: 13px; }
+.prose hr { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+.prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 14px; }
+.prose th { background: var(--bg-3); color: var(--gold); padding: 8px 12px; text-align: left; font-weight: 500; border: 0.5px solid var(--border-2); }
+.prose td { padding: 8px 12px; border: 0.5px solid var(--border); color: var(--text-2); }
+.prose img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
