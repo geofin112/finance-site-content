@@ -1,3 +1,4 @@
+'use client';
 import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
@@ -32,6 +33,22 @@ export default function BlogPage() {
 
   return (
     <div>
+      <style>{`
+        .blog-card {
+          display: block;
+          background: var(--bg-2);
+          border: 0.5px solid var(--border);
+          border-radius: 10px;
+          padding: 1.5rem;
+          text-decoration: none;
+          transition: border-color 0.2s, transform 0.2s;
+        }
+        .blog-card:hover {
+          border-color: rgba(201,168,76,0.35);
+          transform: translateY(-2px);
+        }
+      `}</style>
+
       {/* Header */}
       <div style={{ borderBottom: '0.5px solid rgba(255,255,255,0.07)', padding: '3rem 0 2rem', background: 'var(--bg-1)' }}>
         <div className="container">
@@ -61,10 +78,7 @@ export default function BlogPage() {
 export function BlogCard({ post, base }) {
   const biasColor = post.bias?.toLowerCase() === 'bullish' ? '#2ECC71' : post.bias?.toLowerCase() === 'bearish' ? '#E74C3C' : 'var(--text-3)';
   return (
-    <Link href={`${base}/${post.slug}`} style={{ display: 'block', background: 'var(--bg-2)', border: '0.5px solid var(--border)', borderRadius: '10px', padding: '1.5rem', textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s' }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,0.35)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'none'; }}
-    >
+    <Link href={`${base}/${post.slug}`} className="blog-card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '0.5rem' }}>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           {post.tag && <span className="tag tag-gold">{post.tag}</span>}
